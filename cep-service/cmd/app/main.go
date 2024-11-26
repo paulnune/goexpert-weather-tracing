@@ -8,9 +8,9 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/paulnune/goexpert-weather/cep-service/internal/infra/web"
+	"github.com/paulnune/goexpert-weather/cep-service/internal/infra/web/webserver"
 	"github.com/paulnune/goexpert-weather/configs"
-	"github.com/paulnune/goexpert-weather/input-api/internal/infra/web"
-	"github.com/paulnune/goexpert-weather/input-api/internal/infra/web/webserver"
 	otel_provider "github.com/paulnune/goexpert-weather/pkg/otel"
 	"github.com/spf13/viper"
 	"go.opentelemetry.io/otel"

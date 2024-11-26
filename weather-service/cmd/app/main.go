@@ -9,16 +9,16 @@ import (
 	"time"
 
 	"github.com/paulnune/goexpert-weather/configs"
-	"github.com/paulnune/goexpert-weather/orchestrator-api/internal/infra/web"
-	"github.com/paulnune/goexpert-weather/orchestrator-api/internal/infra/web/webserver"
 	otel_provider "github.com/paulnune/goexpert-weather/pkg/otel"
+	"github.com/paulnune/goexpert-weather/weather-service/internal/infra/web"
+	"github.com/paulnune/goexpert-weather/weather-service/internal/infra/web/webserver"
 	"go.opentelemetry.io/otel"
 )
 
 func ConfigureServer(conf *configs.Conf) *webserver.WebServer {
 	fmt.Println("Starting web server on port", conf.OrchestratorApiPort)
 
-	tracer := otel.Tracer("orchestrator-api-tracer")
+	tracer := otel.Tracer("weather-service-tracer")
 
 	webserver := webserver.NewWebServer(":" + conf.OrchestratorApiPort)
 	webCEPHandler := web.NewWebCEPHandler(conf, tracer)

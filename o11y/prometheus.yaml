@@ -5,12 +5,12 @@ scrape_configs:
       - targets: ['otel-collector:8888']
       - targets: ['otel-collector:8889']
 
-  - job_name: 'input-api'
+  - job_name: 'cep-service'
     scrape_interval: 10s
     static_configs:
-      - targets: ['input-api:8080']
+      - targets: ['cep-service:8080']
 
-  - job_name: 'orchestrator-api'
+  - job_name: 'weather-service'
     scrape_interval: 10s
     static_configs:
-      - targets: ['orchestrator-api:8081']
+      - targets: ['weather-service:8081']

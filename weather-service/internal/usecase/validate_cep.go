@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"github.com/paulnune/goexpert-weather/orchestrator-api/internal/entity"
+	"github.com/paulnune/goexpert-weather/weather-service/internal/entity"
 )
 
 type ValidateCEPInputDTO struct {

@@ -3,7 +3,7 @@ package usecase
 import (
 	"strings"
 
-	"github.com/paulnune/goexpert-weather/orchestrator-api/internal/entity"
+	"github.com/paulnune/goexpert-weather/weather-service/internal/entity"
 )
 
 type CEPInputDTO struct {

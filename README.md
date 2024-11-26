@@ -71,6 +71,7 @@ curl "http://localhost:8082/weather?cep=01001000"
 - Para o `cep-service`:
    ```bash
    cd cep-service
+   go mod tidy
    go run cmd/app/main.go
    ```
 

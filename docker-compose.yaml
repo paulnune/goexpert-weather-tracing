@@ -104,18 +104,18 @@ services:
       - zipkin
       # - jaeger
 
-  orchestrator-api:
-    container_name: orchestrator-api
-    hostname: orchestrator-api
+  weather-service:
+    container_name: weather-service
+    hostname: weather-service
     restart: always
-    image: aleroxac/orchestrator-api:v1
+    image: aleroxac/weather-service:v1
     build:
       dockerfile: Dockerfile
       context: .
       tags:
-        - aleroxac/orchestrator-api:v1
+        - aleroxac/weather-service:v1
       args:
-        - TARGET_API=orchestrator-api
+        - TARGET_API=weather-service
         - API_PORT=8081
     ports:
       - 8081:8081
@@ -126,24 +126,24 @@ services:
     networks:
       - weather-api-otel
 
-  input-api:
-    container_name: input-api
-    hostname: input-api
+  cep-service:
+    container_name: cep-service
+    hostname: cep-service
     restart: always
-    image: aleroxac/input-api:v1
+    image: aleroxac/cep-service:v1
     build:
       dockerfile: Dockerfile
       context: .
       tags:
-        - aleroxac/input-api:v1
+        - aleroxac/cep-service:v1
       args:
-        - TARGET_API=input-api
+        - TARGET_API=cep-service
         - API_PORT=8080
     ports:
       - 8080:8080
     env_file:
       - .env
     depends_on:
-      - orchestrator-api
+      - weather-service
     networks:
       - weather-api-otel

@@ -7,9 +7,9 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/paulnune/goexpert-weather/configs"
-	"github.com/paulnune/goexpert-weather/orchestrator-api/internal/entity"
-	"github.com/paulnune/goexpert-weather/orchestrator-api/internal/infra/repo"
-	"github.com/paulnune/goexpert-weather/orchestrator-api/internal/usecase"
+	"github.com/paulnune/goexpert-weather/weather-service/internal/entity"
+	"github.com/paulnune/goexpert-weather/weather-service/internal/infra/repo"
+	"github.com/paulnune/goexpert-weather/weather-service/internal/usecase"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/trace"
