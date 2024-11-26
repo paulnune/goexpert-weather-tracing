@@ -10,7 +10,7 @@ import (
 	"regexp"
 	"time"
 
-	"github.com/paulnune/goexpert-weather/weather-service/internal/entity"
+	"github.com/paulnune/goexpert-weather-tracing/weather-service/internal/entity"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/propagation"

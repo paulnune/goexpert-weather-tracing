@@ -8,10 +8,10 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/paulnune/goexpert-weather/configs"
-	otel_provider "github.com/paulnune/goexpert-weather/pkg/otel"
-	"github.com/paulnune/goexpert-weather/weather-service/internal/infra/web"
-	"github.com/paulnune/goexpert-weather/weather-service/internal/infra/web/webserver"
+	"github.com/paulnune/goexpert-weather-tracing/configs"
+	otel_provider "github.com/paulnune/goexpert-weather-tracing/pkg/otel"
+	"github.com/paulnune/goexpert-weather-tracing/weather-service/internal/infra/web"
+	"github.com/paulnune/goexpert-weather-tracing/weather-service/internal/infra/web/webserver"
 	"go.opentelemetry.io/otel"
 )
 

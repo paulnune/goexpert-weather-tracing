@@ -6,10 +6,10 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/paulnune/goexpert-weather/cep-service/internal/entity"
-	"github.com/paulnune/goexpert-weather/cep-service/internal/infra/repo"
-	"github.com/paulnune/goexpert-weather/cep-service/internal/usecase"
-	"github.com/paulnune/goexpert-weather/configs"
+	"github.com/paulnune/goexpert-weather-tracing/cep-service/internal/entity"
+	"github.com/paulnune/goexpert-weather-tracing/cep-service/internal/infra/repo"
+	"github.com/paulnune/goexpert-weather-tracing/cep-service/internal/usecase"
+	"github.com/paulnune/goexpert-weather-tracing/configs"
 	"go.opentelemetry.io/otel/trace"
 )
 
