@@ -39,122 +39,71 @@ curl "http://localhost:8082/weather?cep=01001000"
 
 ## Como executar o projeto 🚀
 
-### Utilizando Docker Compose
+### Subindo os serviços
+Utilize o comando a seguir para subir toda a infraestrutura necessária:
 
-1. Suba os containers com:
-   ```bash
-   docker-compose up --build
-   ```
+```bash
+make infra-up
+```
 
-2. Os serviços estarão disponíveis em:
-   - `cep-service`: [http://localhost:8081](http://localhost:8081)
-   - `weather-service`: [http://localhost:8082](http://localhost:8082)
+### Chamando os serviços
+- Para enviar uma consulta ao `cep-service`:
+  ```bash
+  make svc-a
+  ```
+- Para consultar o `weather-service` com base no CEP:
+  ```bash
+  make svc-b
+  ```
 
-### Utilizando Podman Compose
+### Derrubando a infraestrutura
+Para parar e remover os containers criados, use:
+```bash
+make infra-down
+```
 
-1. Suba os containers com:
-   ```bash
-   podman-compose up --build
-   ```
+### Limpando recursos Docker/Podman
+Para remover containers, imagens e volumes não utilizados, execute:
+```bash
+make docker-clean-up
+```
 
-2. Acesse os mesmos endpoints indicados acima.
+## Evidências 📷
 
-### Localmente
+### Imagem 1: Tela do Zipkin exibindo os traces do `service-b`
+![Imagem 1](1.png)
+Esta imagem mostra a visualização de um trace no `service-b`, com spans detalhados para identificar tempos de execução das chamadas.
 
-1. Configure as variáveis de ambiente:
-   ```bash
-   export WEATHER_API_KEY="sua_chave_api_weather"
-   ```
+### Imagem 2: Detalhamento de spans do `service-b`
+![Imagem 2](2.png)
+Esta imagem apresenta o detalhamento dos spans internos do `service-b`, incluindo o início (`service-b-start`) e chamadas específicas como `get-location` e `get-weather`.
 
-2. Execute cada serviço individualmente:
+### Imagem 3: Trace do `service-a` chamando o `service-b`
+![Imagem 3](3.png)
+Nesta imagem, vemos o trace do `service-a` ao realizar uma chamada para o `service-b`, exibindo um único span com tempo total.
 
-- Para o `cep-service`:
-   ```bash
-   cd cep-service
-   go mod tidy
-   go run cmd/app/main.go
-   ```
-
-- Para o `weather-service`:
-   ```bash
-   cd weather-service
-   go run cmd/app/main.go
-   ```
+### Imagem 4: Listagem de traces no Zipkin
+![Imagem 4](4.png)
+Aqui está a visão geral de vários traces no Zipkin, exibindo a duração e os serviços envolvidos em cada trace.
 
 ## Estrutura do Projeto 📂
 
 ```
 .
-├── cep-service
-│   ├── cmd
-│   │   └── app
-│   │       └── main.go
-│   ├── Dockerfile
-│   └── internal
-│       ├── entity
-│       │   ├── cep.go
-│       │   └── interface.go
-│       ├── infra
-│       │   ├── repo
-│       │   │   └── cep_repository.go
-│       │   └── web
-│       │       ├── cep_handler.go
-│       │       ├── status_handler.go
-│       │       └── webserver
-│       │           ├── starter.go
-│       │           └── webserver.go
-│       └── usecase
-│           ├── get_cep.go
-│           └── validate_cep.go
-├── configs
-│   └── config.go
 ├── docker-compose.yaml
-├── go.mod
-├── go.sum
-├── o11y
-│   ├── otel-collector-config.yaml
-│   └── prometheus.yaml
-├── pkg
-│   └── otel
-│       └── otel_provider.go
+├── Makefile
 ├── README.md
-└── weather-service
-    ├── cmd
-    │   └── app
-    │       └── main.go
+├── service_a
+│   ├── Dockerfile
+│   ├── go.mod
+│   ├── go.sum
+│   └── main.go
+└── service_b
     ├── Dockerfile
-    └── internal
-        ├── entity
-        │   ├── cep.go
-        │   ├── interface.go
-        │   └── weather.go
-        ├── infra
-        │   ├── repo
-        │   │   ├── cep_repository.go
-        │   │   └── weather_repository.go
-        │   └── web
-        │       ├── cep_handler.go
-        │       ├── status_handler.go
-        │       └── webserver
-        │           ├── starter.go
-        │           └── webserver.go
-        └── usecase
-            ├── get_cep.go
-            ├── get_weather.go
-            └── validate_cep.go
+    ├── go.mod
+    ├── go.sum
+    └── main.go
 ```
-
-## Testes automatizados ✅
-
-1. Configure o ambiente:
-   ```bash
-   go mod tidy
-   ```
-
-2. Execute os testes:
-   ```bash
-   go test ./internal/repository/... ./internal/usecase/... -v
-   ```
 
 ## 👨‍💻 Autor
 
