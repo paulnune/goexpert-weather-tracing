@@ -14,76 +14,56 @@ Projeto desenvolvido em Go para consulta de clima atual com base em um CEP. O si
 ## Requisitos 📦
 
 - Docker ou Podman e Docker ou Podman Compose instalados.
-- Configuração do ambiente com as variáveis:
+- Configuração do ambiente com a variável no arquivo **.env**:
   - `WEATHER_API_KEY`: Chave da API WeatherAPI para consulta de clima.
-
-## Exemplos de uso 🛠️
-
-### Com `curl`
-
-#### `cep-service`
-
-```bash
-curl "http://localhost:8081/validate?cep=01001000"
-# Saída esperada:
-# {"cep":"01001-000","logradouro":"Praça da Sé","localidade":"São Paulo","uf":"SP"}
-```
-
-#### `weather-service`
-
-```bash
-curl "http://localhost:8082/weather?cep=01001000"
-# Saída esperada:
-# {"temp_C":22.1,"temp_F":71.78,"temp_K":295.25}
-```
 
 ## Como executar o projeto 🚀
 
 ### Subindo os serviços
-Utilize o comando a seguir para subir toda a infraestrutura necessária:
+Utilize o comando a seguir para subir toda a atividade:
 
 ```bash
-make infra-up
+make all
 ```
 
 ### Chamando os serviços
-- Para enviar uma consulta ao `cep-service`:
+- Para enviar uma consulta ao `service_a`:
   ```bash
   make svc-a
   ```
-- Para consultar o `weather-service` com base no CEP:
+- Para consultar o `service_b` com base no CEP:
   ```bash
   make svc-b
   ```
 
-### Derrubando a infraestrutura
+### Destruindo os serviços
 Para parar e remover os containers criados, use:
 ```bash
-make infra-down
+make down
 ```
 
 ### Limpando recursos Docker/Podman
 Para remover containers, imagens e volumes não utilizados, execute:
 ```bash
-make docker-clean-up
+make clean
 ```
 
 ## Evidências 📷
 
 ### Imagem 1: Tela do Zipkin exibindo os traces do `service-b`
-![Imagem 1](1.png)
+![Imagem 1](.assets/1.png)
 Esta imagem mostra a visualização de um trace no `service-b`, com spans detalhados para identificar tempos de execução das chamadas.
 
 ### Imagem 2: Detalhamento de spans do `service-b`
-![Imagem 2](2.png)
+![Imagem 2](.assets/2.png)
 Esta imagem apresenta o detalhamento dos spans internos do `service-b`, incluindo o início (`service-b-start`) e chamadas específicas como `get-location` e `get-weather`.
 
 ### Imagem 3: Trace do `service-a` chamando o `service-b`
-![Imagem 3](3.png)
+![Imagem 3](.assets/3.png)
 Nesta imagem, vemos o trace do `service-a` ao realizar uma chamada para o `service-b`, exibindo um único span com tempo total.
 
 ### Imagem 4: Listagem de traces no Zipkin
-![Imagem 4](4.png)
+![Imagem 4](.assets/4.png)
 Aqui está a visão geral de vários traces no Zipkin, exibindo a duração e os serviços envolvidos em cada trace.
 
 ## Estrutura do Projeto 📂
