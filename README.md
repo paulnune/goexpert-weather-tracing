@@ -17,24 +17,28 @@ Projeto desenvolvido em Go para consulta de clima atual com base em um CEP. O si
 - Configuração do ambiente com a variável no arquivo **.env**:
   - `WEATHER_API_KEY`: Chave da API WeatherAPI para consulta de clima.
 
+### Para critério de avaliação, mantive o arquivo .env com a minha chave de API privada. Em um cenário real, é necessário utilizar a própria API_KEY. 
+
 ## Como executar o projeto 🚀
 
 ### Subindo os serviços
-Utilize o comando a seguir para subir toda a atividade:
+
+1. Utilize o comando a seguir para subir toda a atividade:
 
 ```bash
 make all
 ```
 
-### Chamando os serviços
-- Para enviar uma consulta ao `service_a`:
-  ```bash
-  make svc-a
-  ```
-- Para consultar o `service_b` com base no CEP:
-  ```bash
-  make svc-b
-  ```
+2. No seu navegador local, abra a URL e valide as evidências. Abaixo algumas imagens de referência:
+
+http://localhost:9411/
+
+
+3. Para limpar os recursos, executar:
+
+```bash
+make clean
+```
 
 ### Destruindo os serviços
 Para parar e remover os containers criados, use:
@@ -50,21 +54,25 @@ make clean
 
 ## Evidências 📷
 
-### Imagem 1: Tela do Zipkin exibindo os traces do `service-b`
+### Imagem 1: Detalhamento de spans no `service-b`
 ![Imagem 1](.assets/1.png)
-Esta imagem mostra a visualização de um trace no `service-b`, com spans detalhados para identificar tempos de execução das chamadas.
+Esta imagem mostra o trace detalhado do `service-b`, com spans como `service-b-start`, `service-b-get-location` (consulta ao ViaCEP) e `service-b-get-weather` (consulta à API de clima). 
 
-### Imagem 2: Detalhamento de spans do `service-b`
+### Imagem 2: Fluxo mais longo do `service-b`
 ![Imagem 2](.assets/2.png)
-Esta imagem apresenta o detalhamento dos spans internos do `service-b`, incluindo o início (`service-b-start`) e chamadas específicas como `get-location` e `get-weather`.
+Nesta imagem, temos outro trace do `service-b` com maior duração, destacando novamente os spans internos. O maior tempo foi consumido no `service-b-get-location`.
 
 ### Imagem 3: Trace do `service-a` chamando o `service-b`
 ![Imagem 3](.assets/3.png)
-Nesta imagem, vemos o trace do `service-a` ao realizar uma chamada para o `service-b`, exibindo um único span com tempo total.
+Esta imagem exibe o trace do `service-a` enquanto realiza uma chamada ao `service-b`, com um único span representando o tempo total de execução.
 
-### Imagem 4: Listagem de traces no Zipkin
+### Imagem 4: Novo trace do `service-b` com maior duração
 ![Imagem 4](.assets/4.png)
-Aqui está a visão geral de vários traces no Zipkin, exibindo a duração e os serviços envolvidos em cada trace.
+Outro trace detalhado do `service-b`, com uma duração ainda maior, devido ao tempo consumido na consulta ao ViaCEP no span `service-b-get-location`.
+
+### Imagem 5: Listagem de traces no Zipkin
+![Imagem 5](.assets/5.png)
+Esta imagem apresenta a visão geral de todos os traces registrados no Zipkin, incluindo a duração total de cada trace e os serviços envolvidos.
 
 ## Estrutura do Projeto 📂
 

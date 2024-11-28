@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/zipkin"
@@ -30,9 +31,9 @@ type (
 
 func main() {
 	setTracing()
-	http.HandleFunc("POST /", Handle)
+	http.HandleFunc("/", Handle)
 	fmt.Println("Listening on port 8080")
-	http.ListenAndServe(":8080", nil)
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
 func Handle(w http.ResponseWriter, r *http.Request) {
@@ -54,6 +55,7 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 
 	output, status, err := getInfo(input.Cep, ctx)
 	if err != nil {
+		log.Printf("Error fetching info: %v", err)
 		http.Error(w, err.Error(), status)
 		return
 	}
@@ -82,15 +84,16 @@ func setTracing() {
 }
 
 func getInfo(cep string, ctx context.Context) (DTOOutput, int, error) {
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, "http://goapp-service-b:8081/"+cep, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, "http://goapp-b:8081/weather?cep="+strings.ReplaceAll(cep, "-", ""), nil)
 	if err != nil {
 		return DTOOutput{}, http.StatusInternalServerError, err
 	}
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return DTOOutput{}, resp.StatusCode, err
+		return DTOOutput{}, http.StatusInternalServerError, err
 	}
+	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusNotFound {
 		return DTOOutput{}, resp.StatusCode, errors.New("can not find zipcode")
@@ -102,10 +105,11 @@ func getInfo(cep string, ctx context.Context) (DTOOutput, int, error) {
 		return output, resp.StatusCode, err
 	}
 
-	return output, resp.StatusCode, err
+	return output, resp.StatusCode, nil
 }
 
 func validCep(cep string) bool {
+	cep = strings.ReplaceAll(cep, "-", "") // Remove o hífen
 	if len(cep) != 8 {
 		return false
 	}

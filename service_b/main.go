@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strings"
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/zipkin"
@@ -119,7 +120,7 @@ func getLocation(ctx context.Context, cep string) (Location, error) {
 	_, span := otel.Tracer("service-b").Start(ctx, "3 - service-b-get-location")
 	defer span.End()
 
-	url := fmt.Sprintf("https://viacep.com.br/ws/%s/json", cep)
+	url := fmt.Sprintf("https://viacep.com.br/ws/%s/json", strings.ReplaceAll(cep, "-", ""))
 	resp, err := http.Get(url)
 	if err != nil {
 		return Location{}, err
@@ -161,6 +162,7 @@ func getWeather(ctx context.Context, location string) (*Current, error) {
 }
 
 func validCep(cep string) bool {
+	cep = strings.ReplaceAll(cep, "-", "") // Remove o hífen
 	if len(cep) != 8 {
 		return false
 	}
