@@ -51,8 +51,15 @@ Para remover containers, imagens e volumes não utilizados, execute:
 ```bash
 make clean
 ```
+## Evidências do Funcionamento do Projeto 📷
 
-## Evidências 📷
+### No RHEL
+
+```bash
+make play_rhel
+```
+
+## Evidências do Tracing 📷
 
 ### Imagem 1: Detalhamento de spans no `service-b`
 ![Imagem 1](.assets/1.png)
