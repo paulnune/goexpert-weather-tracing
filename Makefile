@@ -32,14 +32,14 @@ clean:
 	sudo docker system prune -af
 
 svc-a:
-	@sleep 3s ;
+	@sleep 10s ;
 	curl -X POST -d '{"cep": "$(CEP)"}' http://localhost:8080
 	@echo '\n' ;
 
 svc-b:	
-	@sleep 3s ;
+	@sleep 10s ;
 	curl http://localhost:8081/weather?cep=$(CEP)
-	@sleep 3s ;
+	@sleep 10s ;
 	@echo '\n' ;
 
 all: up svc-a svc-b
