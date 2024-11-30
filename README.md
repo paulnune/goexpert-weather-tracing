@@ -22,13 +22,13 @@ Projeto desenvolvido em Go para consulta de clima atual com base em um CEP. O si
 ## Evidências do Funcionamento do Projeto 📷
 
 ### No RHEL
-Executa uma gravação de terminal previamente salva, mostrando a execução do projeto no ambiente Red Hat Enterprise Linux (RHEL 9).
+Executa uma gravação de terminal previamente salva, mostrando a execução do projeto no ambiente Red Hat Enterprise Linux (RHEL 9) e comprovando o funcionamento no meu computador pessoal. 
 ```bash
 make play_rhel
 ```
 
 ### No Ubuntu
-Executa uma gravação de terminal previamente salva, mostrando a execução do projeto no ambiente Ubuntu 24.04.
+Executa uma gravação de terminal previamente salva, mostrando a execução do projeto no ambiente Ubuntu Server 24.04 e comprovando o funcionamento em um servidor remoto, do zero. 
 ```bash
 make play_ubuntu
 ```
