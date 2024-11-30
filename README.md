@@ -19,38 +19,6 @@ Projeto desenvolvido em Go para consulta de clima atual com base em um CEP. O si
 
 ### Para critério de avaliação, mantive o arquivo .env com a minha chave de API privada. Em um cenário real, é necessário utilizar a própria API_KEY. 
 
-## Como executar o projeto 🚀
-
-### Subindo os serviços
-
-1. Utilize o comando a seguir para subir toda a atividade:
-
-```bash
-make all
-```
-
-2. No seu navegador local, abra a URL e valide as evidências. Abaixo algumas imagens de referência:
-
-http://localhost:9411/
-
-
-3. Para limpar os recursos, executar:
-
-```bash
-make clean
-```
-
-### Destruindo os serviços
-Para parar e remover os containers criados, use:
-```bash
-make down
-```
-
-### Limpando recursos Docker/Podman
-Para remover containers, imagens e volumes não utilizados, execute:
-```bash
-make clean
-```
 ## Evidências do Funcionamento do Projeto 📷
 
 ### No RHEL
@@ -86,6 +54,39 @@ Outro trace detalhado do `service-b`, com uma duração ainda maior, devido ao t
 ### Imagem 5: Listagem de traces no Zipkin
 ![Imagem 5](.assets/5.png)
 Esta imagem apresenta a visão geral de todos os traces registrados no Zipkin, incluindo a duração total de cada trace e os serviços envolvidos.
+
+## Como executar o projeto 🚀
+
+### Subindo os serviços
+
+1. Utilize o comando a seguir para subir toda a atividade:
+
+```bash
+make all
+```
+
+2. No seu navegador local, abra a URL e valide as evidências. Abaixo algumas imagens de referência:
+
+http://localhost:9411/
+
+
+3. Para limpar os recursos, executar:
+
+```bash
+make clean
+```
+
+### Destruindo os serviços
+Para parar e remover os containers criados, use:
+```bash
+make down
+```
+
+### Limpando recursos Docker/Podman
+Para remover containers, imagens e volumes não utilizados, execute:
+```bash
+make clean
+```
 
 ## Estrutura do Projeto 📂
 
