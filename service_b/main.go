@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -20,13 +21,13 @@ import (
 
 type (
 	Location struct {
-		CEP         string `json:"cep,omitempty"`
-		Logradouro  string `json:"logradouro,omitempty"`
-		Complemento string `json:"complemento,omitempty"`
-		Bairro      string `json:"bairro,omitempty"`
-		Location    string `json:"localidade,omitempty"`
-		UF          string `json:"uf,omitempty"`
-		Error       bool   `json:"erro,omitempty"`
+		CEP         string          `json:"cep,omitempty"`
+		Logradouro  string          `json:"logradouro,omitempty"`
+		Complemento string          `json:"complemento,omitempty"`
+		Bairro      string          `json:"bairro,omitempty"`
+		Location    string          `json:"localidade,omitempty"`
+		UF          string          `json:"uf,omitempty"`
+		Error       json.RawMessage `json:"erro,omitempty"`
 	}
 
 	WeatherResponse struct {
@@ -66,6 +67,8 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 	cep := r.URL.Query().Get("cep")
 	ctx, span := otel.Tracer("service-b").Start(r.Context(), "2 - service-b-start")
 	defer span.End()
+
+	cep = strings.ReplaceAll(cep, "-", "") // Remove o hífen do CEP
 	if valid := validCep(cep); !valid {
 		http.Error(w, "invalid zipcode", http.StatusUnprocessableEntity)
 		return
@@ -73,12 +76,11 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 
 	l, err := getLocation(ctx, cep)
 	if err != nil {
+		if errors.Is(err, ErrCepNotFound) {
+			http.Error(w, "can not find zipcode", http.StatusNotFound)
+			return
+		}
 		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	if l.Error {
-		http.Error(w, "can not find zipcode", http.StatusNotFound)
 		return
 	}
 
@@ -96,6 +98,7 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK) // Garante o código 200
 	json.NewEncoder(w).Encode(response)
 }
 
@@ -112,25 +115,41 @@ func setTracing() {
 			semconv.ServiceNameKey.String("service-b"),
 		)),
 	)
+
 	otel.SetTracerProvider(tp)
 	otel.SetTextMapPropagator(propagation.TraceContext{})
 }
+
+// ErrCepNotFound é retornado quando o CEP não é encontrado
+var ErrCepNotFound = errors.New("can not find zipcode")
 
 func getLocation(ctx context.Context, cep string) (Location, error) {
 	_, span := otel.Tracer("service-b").Start(ctx, "3 - service-b-get-location")
 	defer span.End()
 
-	url := fmt.Sprintf("https://viacep.com.br/ws/%s/json", strings.ReplaceAll(cep, "-", ""))
+	url := fmt.Sprintf("https://viacep.com.br/ws/%s/json", cep)
 	resp, err := http.Get(url)
 	if err != nil {
 		return Location{}, err
 	}
-
 	defer resp.Body.Close()
 
 	var location Location
 	if err := json.NewDecoder(resp.Body).Decode(&location); err != nil {
 		return Location{}, err
+	}
+
+	// Verifica o campo "erro" no JSON retornado pela API ViaCEP
+	var erro bool
+	if location.Error != nil {
+		if err := json.Unmarshal(location.Error, &erro); err == nil && erro {
+			return Location{}, ErrCepNotFound
+		}
+	}
+
+	// Verifica se os campos essenciais estão vazios
+	if location.Location == "" || location.UF == "" {
+		return Location{}, ErrCepNotFound
 	}
 
 	return location, nil
@@ -162,7 +181,6 @@ func getWeather(ctx context.Context, location string) (*Current, error) {
 }
 
 func validCep(cep string) bool {
-	cep = strings.ReplaceAll(cep, "-", "") // Remove o hífen
 	if len(cep) != 8 {
 		return false
 	}
