@@ -54,9 +54,15 @@ make clean
 ## Evidências do Funcionamento do Projeto 📷
 
 ### No RHEL
-
+Executa uma gravação de terminal previamente salva, mostrando a execução do projeto no ambiente Red Hat Enterprise Linux (RHEL 9).
 ```bash
 make play_rhel
+```
+
+### No Ubuntu
+Executa uma gravação de terminal previamente salva, mostrando a execução do projeto no ambiente Ubuntu 24.04.
+```bash
+make play_ubuntu
 ```
 
 ## Evidências do Tracing 📷
